@@ -13,8 +13,8 @@
   display: grid;
   width: 100%;
   height: 100%;
-  -ms-grid-rows: 100px 1fr 100px 80px;
-      grid-template-rows: 100px 1fr 100px 80px;
+  -ms-grid-rows: 100px 1fr 60px 30px;
+      grid-template-rows: 100px 1fr 60px 30px;
       grid-template-areas: 'question' 'answers' 'navigation' 'progress';
 }
 
@@ -22,20 +22,33 @@
   -ms-grid-row: 1;
   -ms-grid-column: 1;
   grid-area: question;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: bold;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-grid-row-align: center;
+      align-self: center;
 }
 
 .wpwizard .step .answers {
   -ms-grid-row: 2;
   -ms-grid-column: 1;
   grid-area: answers;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
 }
 
 .wpwizard .step .navigation {
   -ms-grid-row: 3;
   -ms-grid-column: 1;
   grid-area: navigation;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
 }
 
 .wpwizard .step .progress {
