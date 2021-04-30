@@ -15,7 +15,7 @@ const questionnaire = {
       options: [
         'משקיע סולידי - שונא סיכון ותנודתיות',
         'משקיע זהיר - מוכן לקצת סיכון',
-        'משקיע אמיץ - מחפש להשקיע באפיקים ורעיונות שיכולים להצליח בגדול, או להיכשל בגדול'
+        'משקיע אמיץ - מחפש להשקיע באפיקים ורעיונות שיכולים להצליח או להיכשל בגדול'
       ]
     },
     {
@@ -109,6 +109,7 @@ class WPWizard {
       this.container.innerHTML = `
       <div class='step'>
         <div class='question'>${curr.question}</div>
+        <div class='hero'>&nbsp;</div>
         <ul class='answers'>
           ${answers}
         </ul>
