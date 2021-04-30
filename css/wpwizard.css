@@ -7,4 +7,55 @@
 .wpwizard.fade > * {
   opacity: 0;
 }
+
+.wpwizard .step {
+  display: -ms-grid;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  -ms-grid-rows: 100px 1fr 100px 80px;
+      grid-template-rows: 100px 1fr 100px 80px;
+      grid-template-areas: 'question' 'answers' 'navigation' 'progress';
+}
+
+.wpwizard .step .question {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: question;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.wpwizard .step .answers {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  grid-area: answers;
+}
+
+.wpwizard .step .navigation {
+  -ms-grid-row: 3;
+  -ms-grid-column: 1;
+  grid-area: navigation;
+}
+
+.wpwizard .step .progress {
+  background-color: #f1f1f1;
+  border-radius: 16px;
+  height: 22px;
+  font-size: 18px;
+  -ms-flex-item-align: end;
+      -ms-grid-row-align: end;
+      align-self: end;
+  -ms-grid-row: 4;
+  -ms-grid-column: 1;
+  grid-area: progress;
+}
+
+.wpwizard .step .progress > div {
+  color: #fff !important;
+  background-color: #2196f3 !important;
+  border-radius: 16px;
+  font-size: 18px;
+  padding: 0 10px;
+}
 /*# sourceMappingURL=wpwizard.css.map */

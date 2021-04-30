@@ -69,18 +69,22 @@ class WPWizard {
   };
 
   render = step => {
-    let curr = questionnaire.steps[step];
-    let answers = curr.options.map(option => `<li>${option}</li>`).join('');
+    const curr = questionnaire.steps[step];
+    const answers = curr.options.map(option => `<li>${option}</li>`).join('');
+    const pct = parseInt(((step + 1) / questionnaire.steps.length) * 100);
 
     this.clear(() => {
       this.container.innerHTML = `
       <div class='step'>
-        <div class='step-question'>${curr.question}</div>
-        <ul class='step-answers'>
+        <div class='question'>${curr.question}</div>
+        <ul class='answers'>
           ${answers}
         </ul>
         <div class='navigation'>
           <button class='next'>next question</button>
+        </div>
+        <div class='progress'>
+          <div style='width:${pct}%'>${pct}%</div>
         </div>
       </div>
     `;
@@ -118,7 +122,7 @@ class WPWizard {
       this.container.innerHTML = '';
       this.container.classList.remove('fade');
       cb();
-    }, 1000);
+    }, 500);
   };
 
   restore = () => {
