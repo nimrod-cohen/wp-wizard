@@ -1,0 +1,12 @@
+.wpwizard {
+  > * {
+    opacity: 1;
+    transition: opacity 1s;
+  }
+
+  &.fade {
+    > * {
+      opacity: 0;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 <?php 
 /*
-Plugin Name: Email Users On Posts
+Plugin Name: WP-Wizard
 Plugin URI: http://www.google.com/?#q=who+is+the+dude
 Description: This plugin adds a beautiful Q&A wizard to your site
 Version: 0.0.1
@@ -11,23 +11,37 @@ Author URI: http://www.google.com/?#q=who+is+the+dude
 License: Free for all and all purposes without warrenty and no attribution required. just use the damn thing as you please.
 */
 class WPWizard {
-  protected $file;
-  protected $plugin;
-  protected $basename;
-  protected $active;
-
-  public function __construct( $file ) {
-    $this->file = $file;
-    add_action( 'admin_init', [$this, 'setPluginProperties'] );
-    return $this;
+  
+  function __construct() {
+    add_action('init', [$this, 'initialize']);
   }
 
-  public function setPluginProperties() {
-    $this->plugin   = get_plugin_data( $this->file );
-    $this->basename = plugin_basename( $this->file );
-    $this->active   = is_plugin_active( $this->basename );
+  function initialize() {
+    add_action('wp_enqueue_scripts', [$this,'enqueueAssets']);
   }
 
+  function enqueueAssets()
+	{
+		wp_register_script("jsutils-js",plugin_dir_url(__FILE__).DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."jsutils.js",[]);
+		wp_register_script("wpwizard-js",plugin_dir_url(__FILE__).DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."wpwizard.js",['jsutils-js']);
+		wp_enqueue_script("jsutils-js");
+    wp_enqueue_script("wpwizard-js");
+
+    wp_register_style("wpwizard-style",plugin_dir_url(__FILE__).DIRECTORY_SEPARATOR."css".DIRECTORY_SEPARATOR."wpwizard.css");
+    wp_enqueue_style("wpwizard-style");
+
+		wp_localize_script( 'wpwizard-js', 'wpwizard',
+			 ['ajax_url' => admin_url( 'admin-ajax.php' )]
+    );
+	}
 }
 
+$wizard = new WPWizard();
+
+include_once(plugin_dir_path(__FILE__).'updater.php');
+
+$updater = new WPWizardUpdater(__FILE__); // instantiate updater class
+$updater->setUsername('nimrod-cohen');
+$updater->setRepository( 'wp-wizard' );
+$updater->initialize();
 ?>

@@ -1,0 +1,10 @@
+.wpwizard > * {
+  opacity: 1;
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
+}
+
+.wpwizard.fade > * {
+  opacity: 0;
+}
+/*# sourceMappingURL=wpwizard.css.map */
