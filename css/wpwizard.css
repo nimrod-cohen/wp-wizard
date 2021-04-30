@@ -15,6 +15,7 @@
   height: 100%;
   -ms-grid-rows: 100px 1fr 60px 30px;
       grid-template-rows: 100px 1fr 60px 30px;
+  gap: 10px;
       grid-template-areas: 'question' 'answers' 'navigation' 'progress';
 }
 
@@ -38,23 +39,69 @@
   -ms-grid-column: 1;
   grid-area: answers;
   -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
       align-self: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.wpwizard .step .answers li {
+  background: #f7f7f7;
+  padding: 15px;
+  padding-right: 10px;
+  border-radius: 4px;
+}
+
+.wpwizard .step .answers li label {
+  cursor: pointer;
+}
+
+.wpwizard .step .answers li label input[type='radio'] {
+  margin-left: 10px;
 }
 
 .wpwizard .step .navigation {
   -ms-grid-row: 3;
   -ms-grid-column: 1;
   grid-area: navigation;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
+  -ms-grid-row-align: center;
       align-self: center;
+  display: -ms-grid;
+  display: grid;
+  justify-items: end;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  grid-auto-flow: column;
+}
+
+.wpwizard .step .navigation button.next {
+  -webkit-box-shadow: 0px 0px 10px 0px #003cff33;
+          box-shadow: 0px 0px 10px 0px #003cff33;
+  background: #007bff;
+  border: 0;
+  padding: 10px;
+  color: white;
+  border-radius: 4px;
+}
+
+.wpwizard .step .navigation button.back {
+  background: transparent;
+  border: 0;
+  padding: 10px;
+  color: #007bff;
+  border-radius: 4px;
 }
 
 .wpwizard .step .progress {
   background-color: #f1f1f1;
   border-radius: 16px;
-  height: 22px;
+  height: 26px;
   font-size: 18px;
   -ms-flex-item-align: end;
       -ms-grid-row-align: end;
@@ -65,10 +112,10 @@
 }
 
 .wpwizard .step .progress > div {
-  color: #fff !important;
-  background-color: #2196f3 !important;
+  color: #fff;
+  background-color: #007bff;
   border-radius: 16px;
   font-size: 18px;
-  padding: 0 10px;
+  padding: 2px 10px;
 }
 /*# sourceMappingURL=wpwizard.css.map */

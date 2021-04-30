@@ -1,6 +1,7 @@
 const questionnaire = {
   steps: [
     {
+      id: '1',
       question: 'האם יש לך ניסיון בהשקעות בשוק ההון?',
       options: [
         'אין לי בכלל ידע או ניסיון בהשקעות',
@@ -9,6 +10,7 @@ const questionnaire = {
       ]
     },
     {
+      id: '2',
       question: 'איזה סוג משקיע אתה?',
       options: [
         'משקיע סולידי - שונא סיכון ותנודתיות',
@@ -17,10 +19,12 @@ const questionnaire = {
       ]
     },
     {
+      id: '3',
       question: 'לאיזה טווח זמן אתה מתכוון להשקיע ברציפות?',
       options: ['פחות מ-5 שנים', '5-15 שנים', 'מעל 15 שנה']
     },
     {
+      id: '4',
       question: 'עד כמה שוק ההון מעניין אותך?',
       options: [
         'ממש לא מעניין',
@@ -40,6 +44,12 @@ class WPWizard {
     let opts = {
       type: 'inline',
       hideBackground: false,
+      showBackButton: true,
+      texts: {
+        continue: 'המשך',
+        back: 'חזור',
+        finish: 'לחץ לקבלת התוצאות'
+      },
       ...options
     };
     this.options = opts;
@@ -58,6 +68,16 @@ class WPWizard {
         this.state.set('step', step + 1);
       }
     );
+
+    JSUtils.addGlobalEventListener(
+      this.container,
+      '.navigation .back',
+      'click',
+      () => {
+        let step = this.state.get('step');
+        this.state.set('step', step - 1);
+      }
+    );
   }
 
   show = () => {
@@ -70,8 +90,20 @@ class WPWizard {
 
   render = step => {
     const curr = questionnaire.steps[step];
-    const answers = curr.options.map(option => `<li>${option}</li>`).join('');
+    const answers = curr.options
+      .map(
+        option =>
+          `<li><label><input name= 'question_${curr.id}' type='radio' />${option}</li>`
+      )
+      .join('');
     const pct = parseInt(((step + 1) / questionnaire.steps.length) * 100);
+
+    const backButton =
+      step > 0 && this.options.showBackButton
+        ? `<button class='back'>&#8594; ${this.options.texts.back}</button>`
+        : '<span>&nbsp;</span>';
+
+    const isLastStep = step === questionnaire.steps.length - 1;
 
     this.clear(() => {
       this.container.innerHTML = `
@@ -81,7 +113,10 @@ class WPWizard {
           ${answers}
         </ul>
         <div class='navigation'>
-          <button class='next'>next question</button>
+        ${backButton}
+        <button class='next'>${
+          isLastStep ? this.options.texts.finish : this.options.texts.continue
+        } &#8592;</button>
         </div>
         <div class='progress'>
           <div style='width:${pct}%'>${pct}%</div>
