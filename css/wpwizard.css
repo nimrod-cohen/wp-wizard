@@ -1,7 +1,12 @@
 .wpwizard > * {
   opacity: 1;
-  -webkit-transition: opacity 1s;
-  transition: opacity 1s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+.wpwizard.hide-background {
+  background: white;
+  background-image: none;
 }
 
 .wpwizard.fade > * {
@@ -103,6 +108,12 @@
   border-radius: 4px;
 }
 
+.wpwizard .step .navigation button.next.disabled {
+  -webkit-box-shadow: unset;
+          box-shadow: unset;
+  background: #e7e7e7;
+}
+
 .wpwizard .step .navigation button.back {
   background: transparent;
   border: 0;
@@ -112,6 +123,19 @@
 }
 
 .wpwizard .step .progress {
+  -ms-grid-row: 4;
+  -ms-grid-column: 1;
+  grid-area: progress;
+}
+
+.wpwizard .step .progress div.progress-text {
+  padding: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: gray;
+}
+
+.wpwizard .step .progress .progress-bar {
   background-color: #f1f1f1;
   border-radius: 16px;
   height: 26px;
@@ -119,14 +143,11 @@
   -ms-flex-item-align: end;
       -ms-grid-row-align: end;
       align-self: end;
-  -ms-grid-row: 4;
-  -ms-grid-column: 1;
-  grid-area: progress;
 }
 
-.wpwizard .step .progress > div {
+.wpwizard .step .progress .progress-bar div.progress-percentage {
   color: #fff;
-  background-color: #007bff;
+  background-color: #064d99;
   border-radius: 16px;
   font-size: 18px;
   padding: 2px 10px;

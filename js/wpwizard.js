@@ -4,32 +4,46 @@ const questionnaire = {
       id: '1',
       question: 'האם יש לך ניסיון בהשקעות בשוק ההון?',
       options: [
-        'אין לי בכלל ידע או ניסיון בהשקעות',
-        'יש לי קצת ניסיון והבנה בסיסית בהשקעות',
-        'אני כבר משקיע מספר שנים ויש לי ניסיון'
+        { text: 'אין לי בכלל ידע או ניסיון בהשקעות', value: 'none' },
+        { text: 'יש לי קצת ניסיון והבנה בסיסית בהשקעות', value: 'some' },
+        { text: 'אני כבר משקיע מספר שנים ויש לי ניסיון', value: 'experienced' }
       ]
     },
     {
       id: '2',
       question: 'איזה סוג משקיע אתה?',
       options: [
-        'משקיע סולידי - שונא סיכון ותנודתיות',
-        'משקיע זהיר - מוכן לקצת סיכון',
-        'משקיע אמיץ - מחפש להשקיע באפיקים ורעיונות שיכולים להצליח או להיכשל בגדול'
+        { text: 'משקיע סולידי - שונא סיכון ותנודתיות', value: 'solid' },
+        { text: 'משקיע זהיר - מוכן לקצת סיכון', value: 'cautious' },
+        {
+          text:
+            'משקיע אמיץ - מחפש להשקיע באפיקים ורעיונות שיכולים להצליח או להיכשל בגדול',
+          value: 'risky'
+        }
       ]
     },
     {
       id: '3',
       question: 'לאיזה טווח זמן אתה מתכוון להשקיע ברציפות?',
-      options: ['פחות מ-5 שנים', '5-15 שנים', 'מעל 15 שנה']
+      options: [
+        { text: 'פחות מ-5 שנים', value: 'short' },
+        { text: '5-15 שנים', value: 'medium' },
+        { text: 'מעל 15 שנה', value: 'long' }
+      ]
     },
     {
       id: '4',
       question: 'עד כמה שוק ההון מעניין אותך?',
       options: [
-        'ממש לא מעניין',
-        'קצת מעניין אותי - אני רוצה להבין את הדברים הבסיסיים בהשקעות',
-        'מאוד מעניין אותי - אני רוצה לדעת להשקיע כמו וורן באפט'
+        { text: 'ממש לא מעניין', value: 'follower' },
+        {
+          text: 'קצת מעניין אותי - אני רוצה להבין את הדברים הבסיסיים בהשקעות',
+          value: 'strategic'
+        },
+        {
+          text: 'מאוד מעניין אותי - אני רוצה לדעת להשקיע כמו וורן באפט',
+          value: 'investor'
+        }
       ]
     }
   ]
@@ -44,7 +58,10 @@ class WPWizard {
     let opts = {
       type: 'inline',
       hideBackground: false,
-      showBackButton: true,
+      show: {
+        backButton: true,
+        progressText: true
+      },
       texts: {
         continue: 'המשך',
         back: 'חזור',
@@ -57,7 +74,13 @@ class WPWizard {
     this.container = this.getContainer();
     this.container.classList.add('wpwizard');
     this.state = StateManagerFactory();
-    this.state.listen('step', this.render);
+    this.state.set('answers', {});
+
+    this.state.listen('step', step => {
+      this.clear(() => this.render(step));
+    });
+
+    this.state.listen('answers', this.render);
 
     JSUtils.addGlobalEventListener(
       this.container,
@@ -69,6 +92,18 @@ class WPWizard {
       }
     );
 
+    JSUtils.addGlobalEventListener(
+      this.container,
+      '.answers input',
+      'change',
+      e => {
+        let answers = this.state.get('answers') || {};
+        let step = this.state.get('step');
+        answers[step] = e.target.getAttribute('data-value');
+        this.state.set(answers);
+        this.render();
+      }
+    );
     JSUtils.addGlobalEventListener(
       this.container,
       '.navigation .back',
@@ -88,43 +123,59 @@ class WPWizard {
     }
   };
 
-  render = step => {
-    const curr = questionnaire.steps[step];
-    const answers = curr.options
+  render = () => {
+    const { steps } = questionnaire;
+
+    const step = this.state.get('step');
+    const curr = steps[step];
+
+    let answer = this.state.get('answers')[step];
+
+    const options = curr.options
       .map(
         option =>
-          `<li><label><input name= 'question_${curr.id}' type='radio' />${option}</li>`
+          `<li><label><input name= 'question_${
+            curr.id
+          }' type='radio' data-value='${option.value}' ${
+            answer === option.value ? 'checked' : ''
+          } />${option.text}</li>`
       )
       .join('');
-    const pct = parseInt(((step + 1) / questionnaire.steps.length) * 100);
+    const pct = parseInt(((step + 1) / steps.length) * 100);
 
     const backButton =
-      step > 0 && this.options.showBackButton
+      step > 0 && this.options.show.backButton
         ? `<button class='back'>&#8594; ${this.options.texts.back}</button>`
         : '<span>&nbsp;</span>';
+    const progressText = this.options.show.progressText
+      ? `<div class='progress-text'>${step + 1} מתוך ${steps.length}</div>`
+      : '<span>&nbsp;</span>';
 
-    const isLastStep = step === questionnaire.steps.length - 1;
+    const isLastStep = step === steps.length - 1;
 
-    this.clear(() => {
-      this.container.innerHTML = `
+    this.container.innerHTML = `
       <div class='step'>
         <div class='question'>${curr.question}</div>
         <div class='hero'>&nbsp;</div>
         <ul class='answers'>
-          ${answers}
+          ${options}
         </ul>
         <div class='navigation'>
         ${backButton}
-        <button class='next'>${
-          isLastStep ? this.options.texts.finish : this.options.texts.continue
-        } &#8592;</button>
+        <button class='next ${!answer && 'disabled'}' ${
+      !answer && 'disabled'
+    }>${
+      isLastStep ? this.options.texts.finish : this.options.texts.continue
+    } &#8592;</button>
         </div>
         <div class='progress'>
-          <div style='width:${pct}%'>${pct}%</div>
+          ${progressText}
+          <div class='progress-bar'>
+            <div class='progress-percentage' style='width:${pct}%'>&nbsp;</div>
+          </div>
         </div>
       </div>
     `;
-    });
   };
 
   getContainer = () => {
@@ -135,22 +186,22 @@ class WPWizard {
   start = () => {
     this.original = {
       html: this.container.innerHTML,
-      backgroundImage: this.container.style.backgroundImage,
-      backgroundColor: this.container.style.backgroundColor
+      height: this.container.style.height,
+      minHeight: this.container.style.minHeight
     };
+
+    if (this.options.hideBackground) {
+      this.container.classList.add('hide-background');
+    }
 
     this.state.set('step', 0);
   };
 
   clear = cb => {
+    //keeping the container in its original size.
     let height = this.container.offsetHeight;
     this.container.style.height = `${height}px`;
     this.container.style.minHeight = `${height}px`;
-
-    if (this.options.hideBackground) {
-      this.container.style.backgroundImage = 'none';
-      this.container.style.backgroundColor = 'white';
-    }
 
     this.container.classList.add('fade');
 
@@ -164,8 +215,9 @@ class WPWizard {
   restore = () => {
     this.container.innerHTML = this.original.html;
     if (this.options.hideBackground) {
-      this.container.style.backgroundImage = this.original.backgroundImage;
-      this.container.style.backgroundColor = this.original.backgroundColor;
+      this.container.classList.remove('hide-background');
+      this.container.style.height = this.original.height;
+      this.container.style.minHeight = this.original.minHeight;
     }
   };
 
