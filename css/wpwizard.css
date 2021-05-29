@@ -1,3 +1,8 @@
+.wpwizard * {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 .wpwizard > * {
   opacity: 1;
   -webkit-transition: opacity 0.5s;
@@ -26,6 +31,54 @@
       grid-template-areas: 'question hero' 'answers hero' 'navigation hero' 'progress hero';
 }
 
+.wpwizard .step.addressee-step {
+  display: -ms-grid;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  -ms-grid-rows: min-content min-content 1fr;
+      grid-template-rows: -webkit-min-content -webkit-min-content 1fr;
+      grid-template-rows: min-content min-content 1fr;
+  gap: 10px;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+      grid-template-areas: 'text' 'input' 'navigation';
+}
+
+.wpwizard .step .text {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: text;
+  padding: 20px;
+}
+
+.wpwizard .step .input {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  grid-area: input;
+  display: -ms-grid;
+  display: grid;
+  gap: 5px;
+}
+
+.wpwizard .step .input input[type='text'] {
+  line-height: 32px;
+  border: solid 2px #1ed9fd;
+  padding: 0 10px;
+  border-radius: 4px;
+}
+
+.wpwizard .step .input label.agree {
+  font-size: 0.8em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 8px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .wpwizard .step .hero {
   -ms-grid-row: 1;
   -ms-grid-row-span: 4;
@@ -52,6 +105,12 @@
       align-self: center;
 }
 
+.wpwizard .step span.error {
+  display: block;
+  font-size: 0.8em;
+  color: red;
+}
+
 .wpwizard .step .answers {
   -ms-grid-row: 2;
   -ms-grid-column: 1;
@@ -62,6 +121,8 @@
   display: -ms-flexbox;
   display: flex;
   gap: 10px;
+  padding: 0 20px;
+  line-height: 1.8em;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -73,6 +134,11 @@
   padding: 15px;
   padding-right: 10px;
   border-radius: 4px;
+  border: solid 2px transparent;
+}
+
+.wpwizard .step .answers li.selected {
+  border: solid 2px #1ed9fd;
 }
 
 .wpwizard .step .answers li label {
@@ -87,10 +153,11 @@
   -ms-grid-row: 3;
   -ms-grid-column: 1;
   grid-area: navigation;
-  -ms-grid-row-align: center;
-      align-self: center;
+  -ms-grid-row-align: end;
+      align-self: end;
   display: -ms-grid;
   display: grid;
+  padding: 0 20px;
   justify-items: end;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
@@ -126,6 +193,7 @@
   -ms-grid-row: 4;
   -ms-grid-column: 1;
   grid-area: progress;
+  padding: 0 20px;
 }
 
 .wpwizard .step .progress div.progress-text {
@@ -147,7 +215,7 @@
 
 .wpwizard .step .progress .progress-bar div.progress-percentage {
   color: #fff;
-  background-color: #064d99;
+  background-color: #1ed9fd;
   border-radius: 16px;
   font-size: 18px;
   padding: 2px 10px;

@@ -3,7 +3,7 @@
 Plugin Name: WP-Wizard
 Plugin URI: http://www.google.com/?#q=who+is+the+dude
 Description: This plugin adds a beautiful Q&A wizard to your site
-Version: 0.0.1
+Version: 0.0.2
 Author: Nimrod Cohen
 Text Domain: wp-wizard
 Domain Path: /languages
@@ -18,6 +18,20 @@ class WPWizard {
 
   function initialize() {
     add_action('wp_enqueue_scripts', [$this,'enqueueAssets']);
+    add_action('wp_ajax_save_wizard_results',[$this, 'saveResults']);
+    add_action('wp_ajax_nopriv_save_wizard_results',[$this, 'saveResults']);
+  }
+
+  function saveResults()
+  {
+    $customerIO = new CustomerIO();
+
+    $customerIO->createCustomer($_REQUEST["email"],null);
+
+    $customerIO->sendEvent('questionnaire', $_REQUEST["email"],$_REQUEST);
+
+    echo json_encode(["error" => false]);
+    die;
   }
 
   function enqueueAssets()
