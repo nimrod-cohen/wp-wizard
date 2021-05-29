@@ -1,13 +1,13 @@
 <?php 
 /*
 Plugin Name: WP-Wizard
-Plugin URI: http://www.google.com/?#q=who+is+the+dude
+Plugin URI: https://www.google.com/search?q=who+is+the+dude
 Description: This plugin adds a beautiful Q&A wizard to your site
 Version: 0.0.2
 Author: Nimrod Cohen
 Text Domain: wp-wizard
 Domain Path: /languages
-Author URI: http://www.google.com/?#q=who+is+the+dude
+Author URI: https://www.google.com/search?q=who+is+the+dude
 License: Free for all and all purposes without warrenty and no attribution required. just use the damn thing as you please.
 */
 class WPWizard {
